@@ -21,4 +21,8 @@
     <Folder Include="Areas\Admin\Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LayeredShop.DataAccess\LayeredShop.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
