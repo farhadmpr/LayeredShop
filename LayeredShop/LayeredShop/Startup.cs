@@ -13,6 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LayeredShop.DataAccess.Data;
 using LayeredShop.DataAccess.Data.Repository.IRepository;
+using LayeredShop.DataAccess.Data.Repository;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using LayeredShop.Utility;
 
 namespace LayeredShop
 {
@@ -36,13 +39,27 @@ namespace LayeredShop
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUnitOfWork, IUnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson()
                 .AddRazorRuntimeCompilation();
 
             services.AddRazorPages();
+
+            services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.ConfigureApplicationCookie(options =>
+
+            {
+
+                options.LoginPath = $"/Identity/Account/Login";
+
+                options.LogoutPath = $"/Identity/Account/Logout";
+
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
