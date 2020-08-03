@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LayeredShop.DataAccess.Data.Repository.IRepository;
+using LayeredShop.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LayeredShop.Areas.Admin.Controllers
@@ -23,7 +24,25 @@ namespace LayeredShop.Areas.Admin.Controllers
         }
 
 
-         #region API CALLS
+        public IActionResult Insert(int? id)
+        {
+            Category category = new Category();
+
+            if (id == null)
+            {
+                return View(category);
+            }
+
+            category = _unitOfWork.Category.Get(id.GetValueOrDefault());
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        #region API CALLS
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -42,10 +61,10 @@ namespace LayeredShop.Areas.Admin.Controllers
                     message = "Error while deleting"
                 });
             }
-            
+
             _unitOfWork.Category.Remove(category);
             _unitOfWork.Save();
-            
+
             return Json(new
             {
                 success = true,
