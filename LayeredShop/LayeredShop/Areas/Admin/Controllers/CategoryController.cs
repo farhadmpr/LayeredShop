@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LayeredShop.DataAccess.Data.Repository.IRepository;
 using LayeredShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LayeredShop.Areas.Admin.Controllers
 {
@@ -39,6 +40,26 @@ namespace LayeredShop.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            return View(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Insert(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                if(category.Id == 0)
+                {
+                    _unitOfWork.Category.Add(category);
+                }
+                else
+                {
+                    _unitOfWork.Category.Update(category);
+                }
+                _unitOfWork.Save();
+                return RedirectToAction(nameof(Index));
+            }
             return View(category);
         }
 
