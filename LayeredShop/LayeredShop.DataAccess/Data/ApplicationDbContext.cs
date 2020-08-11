@@ -15,6 +15,7 @@ namespace LayeredShop.DataAccess.Data
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Service> Services{ get; set; }
 
     }
 }
